@@ -1,0 +1,17 @@
+{
+  "name": "surfacedd",
+  "description": "Surfacedd's plugins for Claude Code: work with your local AI visibility data from the terminal.",
+  "owner": {
+    "name": "Surfacedd",
+    "url": "https://surfacedd.com"
+  },
+  "plugins": [
+    {
+      "name": "surfacedd",
+      "source": "./plugins/surfacedd",
+      "description": "Read-only MCP tools over your local Surfacedd workspace, plus six skills: weekly AI visibility briefing, agent readiness fixes, Search Console traffic drops, competitor gaps, product visibility and a CI agent readiness check.",
+      "category": "marketing",
+      "tags": ["ai-visibility", "seo", "geo", "mcp", "ci"]
+    }
+  ]
+}

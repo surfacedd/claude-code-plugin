@@ -1,0 +1,25 @@
+{
+  "name": "surfacedd",
+  "displayName": "Surfacedd",
+  "version": "1.0.0",
+  "description": "Let Claude Code work with your Surfacedd AI visibility data: read-only MCP tools over your local workspace, plus skills for a weekly briefing, agent readiness fixes, traffic drops, competitor gaps, product visibility and a CI check.",
+  "author": {
+    "name": "Surfacedd",
+    "url": "https://surfacedd.com"
+  },
+  "homepage": "https://surfacedd.com/integrations/claude-code",
+  "repository": "https://github.com/surfacedd/claude-code-plugin",
+  "keywords": [
+    "ai-visibility",
+    "geo",
+    "aeo",
+    "seo",
+    "mcp",
+    "agent-readiness",
+    "search-console"
+  ],
+  "documentationUrl": "https://surfacedd.com/integrations/claude-code",
+  "supportUrl": "https://surfacedd.com/contact",
+  "privacyPolicyUrl": "https://surfacedd.com/privacy",
+  "icon": "./.claude-plugin/icon.png"
+}

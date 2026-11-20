@@ -1,0 +1,1094 @@
+{
+  "tools": [
+    {
+      "name": "list_brands",
+      "description": "Brands and people tracked in Surfacedd, with their latest run and visibility.",
+      "inputSchema": {
+        "properties": {
+          "kind": {
+            "default": null,
+            "description": "`brand` or `person`",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "visibility_summary",
+      "description": "Visibility, share of voice, rank, top-3, recommendation and citation rates (with 95% ranges and counts), by engine and category.",
+      "inputSchema": {
+        "description": "Optional time window: `7d`, `30d`, `90d`, `365d` or `all` (default `90d`), or explicit dates.",
+        "properties": {
+          "brand_id": {
+            "type": "string"
+          },
+          "category_id": {
+            "default": null,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "engine": {
+            "default": null,
+            "description": "One engine: chatgpt, claude, gemini, grok, perplexity, muse, google_ai_mode, google_ai_overview",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "from": {
+            "default": null,
+            "description": "ISO date (inclusive); overrides `range`.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "market_id": {
+            "default": null,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "range": {
+            "default": null,
+            "description": "`7d` | `30d` | `90d` | `365d` | `all`",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "to": {
+            "default": null,
+            "description": "ISO date (inclusive).",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "brand_id"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list_prompts",
+      "description": "Tracked prompts with visibility, average position and intent.",
+      "inputSchema": {
+        "properties": {
+          "brand_id": {
+            "type": "string"
+          },
+          "status": {
+            "default": null,
+            "description": "Prompts: `active` | `paused` | `archived`. Tasks: `todo` | `in_progress` | `done` | `dismissed`.",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "brand_id"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "prompt_results",
+      "description": "One prompt per engine and run: whether the brand was named, its rank, the brands named and the citation count.",
+      "inputSchema": {
+        "description": "Optional time window: `7d`, `30d`, `90d`, `365d` or `all` (default `90d`), or explicit dates.",
+        "properties": {
+          "from": {
+            "default": null,
+            "description": "ISO date (inclusive); overrides `range`.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "prompt_id": {
+            "type": "string"
+          },
+          "range": {
+            "default": null,
+            "description": "`7d` | `30d` | `90d` | `365d` | `all`",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "to": {
+            "default": null,
+            "description": "ISO date (inclusive).",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "prompt_id"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_answer",
+      "description": "One stored AI answer in full: text, mentions, citations, fan-out queries, model and cost.",
+      "inputSchema": {
+        "properties": {
+          "answer_id": {
+            "description": "The answer's `uid` (as returned by other tools).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "answer_id"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "search_answers",
+      "description": "Full-text search over stored answers; returns snippets with engine, date and prompt.",
+      "inputSchema": {
+        "properties": {
+          "brand_id": {
+            "default": null,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "limit": {
+            "default": null,
+            "description": "1–100, default 20.",
+            "format": "uint32",
+            "minimum": 0,
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "query": {
+            "description": "Words to find in answers and prompts (full-text search).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "competitor_share",
+      "description": "Share of voice per competitor and the answers competitors win without the brand.",
+      "inputSchema": {
+        "description": "Optional time window: `7d`, `30d`, `90d`, `365d` or `all` (default `90d`), or explicit dates.",
+        "properties": {
+          "brand_id": {
+            "type": "string"
+          },
+          "from": {
+            "default": null,
+            "description": "ISO date (inclusive); overrides `range`.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "range": {
+            "default": null,
+            "description": "`7d` | `30d` | `90d` | `365d` | `all`",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "to": {
+            "default": null,
+            "description": "ISO date (inclusive).",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "types": {
+            "default": null,
+            "description": "Competitor types to include: direct, indirect, ai_platform, publisher, other (default direct + indirect).",
+            "items": {
+              "type": "string"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "brand_id"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "top_sources",
+      "description": "Domains or pages cited in answers, with citation counts and trend.",
+      "inputSchema": {
+        "description": "Optional time window: `7d`, `30d`, `90d`, `365d` or `all` (default `90d`), or explicit dates.",
+        "properties": {
+          "brand_id": {
+            "type": "string"
+          },
+          "from": {
+            "default": null,
+            "description": "ISO date (inclusive); overrides `range`.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "kind": {
+            "default": null,
+            "description": "`domain` (default) or `page`",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "range": {
+            "default": null,
+            "description": "`7d` | `30d` | `90d` | `365d` | `all`",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "to": {
+            "default": null,
+            "description": "ISO date (inclusive).",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "brand_id"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "fanouts",
+      "description": "Search queries the engines ran while answering, by frequency.",
+      "inputSchema": {
+        "description": "Optional time window: `7d`, `30d`, `90d`, `365d` or `all` (default `90d`), or explicit dates.",
+        "properties": {
+          "brand_id": {
+            "type": "string"
+          },
+          "from": {
+            "default": null,
+            "description": "ISO date (inclusive); overrides `range`.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "range": {
+            "default": null,
+            "description": "`7d` | `30d` | `90d` | `365d` | `all`",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "to": {
+            "default": null,
+            "description": "ISO date (inclusive).",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "brand_id"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list_runs",
+      "description": "Recent runs with status, answers collected and cost.",
+      "inputSchema": {
+        "properties": {
+          "brand_id": {
+            "default": null,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "limit": {
+            "default": null,
+            "description": "1–100, default 20.",
+            "format": "uint32",
+            "minimum": 0,
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list_tasks",
+      "description": "Recommended tasks with the evidence behind each.",
+      "inputSchema": {
+        "properties": {
+          "brand_id": {
+            "type": "string"
+          },
+          "status": {
+            "default": null,
+            "description": "Prompts: `active` | `paused` | `archived`. Tasks: `todo` | `in_progress` | `done` | `dismissed`.",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "brand_id"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "humans_summary",
+      "description": "How AI answers describe a person: recognition, accuracy and discovery.",
+      "inputSchema": {
+        "properties": {
+          "person_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "person_id"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "crawler_stats",
+      "description": "AI crawler visits per bot and day from imported server logs.",
+      "inputSchema": {
+        "description": "Optional time window: `7d`, `30d`, `90d`, `365d` or `all` (default `90d`), or explicit dates.",
+        "properties": {
+          "brand_id": {
+            "type": "string"
+          },
+          "from": {
+            "default": null,
+            "description": "ISO date (inclusive); overrides `range`.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "range": {
+            "default": null,
+            "description": "`7d` | `30d` | `90d` | `365d` | `all`",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "to": {
+            "default": null,
+            "description": "ISO date (inclusive).",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "brand_id"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "site_audit_issues",
+      "description": "Issues found by the latest site audit.",
+      "inputSchema": {
+        "properties": {
+          "brand_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "brand_id"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "agent_readiness",
+      "description": "Agent readiness of the brand's website from the latest check (runs with each site audit): Reach, Understand and Act scores 0–100, failing rules with evidence (URL, fetched snippet, header) and copyable fixes, informational findings on emerging agent protocols, and what changed since the previous check. Deterministic and local; no rule claims to raise AI citations.",
+      "inputSchema": {
+        "properties": {
+          "brand_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "brand_id"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "estimate_run_cost",
+      "description": "What running a report would cost (estimate only; this tool never starts a run).",
+      "inputSchema": {
+        "properties": {
+          "report_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "report_id"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "gsc_summary",
+      "description": "Google Search Console clicks, impressions, CTR and average position for the brand's linked property, with the comparison period, daily trend and device/country split.",
+      "inputSchema": {
+        "description": "Period for Google data: preset days ending at the latest stored day, or explicit dates.",
+        "properties": {
+          "brand_id": {
+            "type": "string"
+          },
+          "compare": {
+            "default": null,
+            "description": "`previous` (default, same number of days before) | `year` (52 weeks earlier) | `none`",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "from": {
+            "default": null,
+            "description": "ISO date (inclusive); with `to`, overrides `range`.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "range": {
+            "default": null,
+            "description": "`7d` | `28d` (default) | `90d` | `180d` | `365d` | `16m`",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "to": {
+            "default": null,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "brand_id"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "gsc_top",
+      "description": "Top Search Console queries or pages (whole weeks) with clicks, impressions, CTR, position and the change against the comparison weeks.",
+      "inputSchema": {
+        "description": "Period for Google data: preset days ending at the latest stored day, or explicit dates.",
+        "properties": {
+          "brand_id": {
+            "type": "string"
+          },
+          "compare": {
+            "default": null,
+            "description": "`previous` (default) | `year` | `none`",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "dim": {
+            "description": "`query` or `page`",
+            "type": "string"
+          },
+          "from": {
+            "default": null,
+            "description": "ISO date (inclusive); with `to`, overrides `range`.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "limit": {
+            "default": null,
+            "description": "1–200, default 50.",
+            "format": "uint32",
+            "minimum": 0,
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "range": {
+            "default": null,
+            "description": "`7d` | `28d` (default) | `90d` | `180d` | `365d` | `16m`",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "search": {
+            "default": null,
+            "description": "Only keys containing this text.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sort": {
+            "default": null,
+            "description": "`clicks` (default) | `impressions` | `change` (largest click change first)",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "to": {
+            "default": null,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "brand_id",
+          "dim"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "gsc_page_queries",
+      "description": "The Search Console queries one page ranks for, with clicks, impressions, CTR and position.",
+      "inputSchema": {
+        "description": "Period for Google data: preset days ending at the latest stored day, or explicit dates.",
+        "properties": {
+          "brand_id": {
+            "type": "string"
+          },
+          "from": {
+            "default": null,
+            "description": "ISO date (inclusive); with `to`, overrides `range`.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "page": {
+            "description": "Full page URL as Search Console reports it.",
+            "type": "string"
+          },
+          "range": {
+            "default": null,
+            "description": "`7d` | `28d` (default) | `90d` | `180d` | `365d` | `16m`",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "to": {
+            "default": null,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "brand_id",
+          "page"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "gsc_opportunities",
+      "description": "Quick wins from Search Console: queries almost on page one (positions 8–20) or seen but rarely clicked (CTR under half of what the position usually gets), ranked by potential clicks.",
+      "inputSchema": {
+        "description": "Period for Google data: preset days ending at the latest stored day, or explicit dates.",
+        "properties": {
+          "brand_id": {
+            "type": "string"
+          },
+          "from": {
+            "default": null,
+            "description": "ISO date (inclusive); with `to`, overrides `range`.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "kind": {
+            "description": "`almost_page_one` (positions 8–20) | `low_ctr` (seen but rarely clicked)",
+            "type": "string"
+          },
+          "limit": {
+            "default": null,
+            "description": "1–200, default 25.",
+            "format": "uint32",
+            "minimum": 0,
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "range": {
+            "default": null,
+            "description": "`7d` | `28d` (default) | `90d` | `180d` | `365d` | `16m`",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "to": {
+            "default": null,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "brand_id",
+          "kind"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "gsc_drop_diagnosis",
+      "description": "Deterministic explanation of a click change between two whole-week windows: lost and new queries, impressions, position and CTR effects, unattributed (anonymized) clicks, lost pages, device and country split, data gaps and Google update annotations. The parts sum to the total change.",
+      "inputSchema": {
+        "description": "Period for Google data: preset days ending at the latest stored day, or explicit dates.",
+        "properties": {
+          "brand_id": {
+            "type": "string"
+          },
+          "compare": {
+            "default": null,
+            "description": "`previous` (default, same number of days before) | `year` (52 weeks earlier) | `none`",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "from": {
+            "default": null,
+            "description": "ISO date (inclusive); with `to`, overrides `range`.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "range": {
+            "default": null,
+            "description": "`7d` | `28d` (default) | `90d` | `180d` | `365d` | `16m`",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "to": {
+            "default": null,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "brand_id"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "ga4_traffic",
+      "description": "Google Analytics 4 sessions, engaged sessions and key events by channel group, source or landing page, with the comparison period.",
+      "inputSchema": {
+        "description": "Period for Google data: preset days ending at the latest stored day, or explicit dates.",
+        "properties": {
+          "brand_id": {
+            "type": "string"
+          },
+          "by": {
+            "default": null,
+            "description": "`channel` (default) | `source` | `landing_page`",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "compare": {
+            "default": null,
+            "description": "`previous` (default) | `year` | `none`",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "from": {
+            "default": null,
+            "description": "ISO date (inclusive); with `to`, overrides `range`.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "range": {
+            "default": null,
+            "description": "`7d` | `28d` (default) | `90d` | `180d` | `365d` | `16m`",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "to": {
+            "default": null,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "brand_id"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "ai_traffic",
+      "description": "Visits from AI assistants (ChatGPT, Perplexity, Gemini, Copilot, Claude, …) in Google Analytics 4: GA4's AI Assistant channel when present, else referrer rules; by assistant and landing page.",
+      "inputSchema": {
+        "description": "Period for Google data: preset days ending at the latest stored day, or explicit dates.",
+        "properties": {
+          "brand_id": {
+            "type": "string"
+          },
+          "compare": {
+            "default": null,
+            "description": "`previous` (default, same number of days before) | `year` (52 weeks earlier) | `none`",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "from": {
+            "default": null,
+            "description": "ISO date (inclusive); with `to`, overrides `range`.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "range": {
+            "default": null,
+            "description": "`7d` | `28d` (default) | `90d` | `180d` | `365d` | `16m`",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "to": {
+            "default": null,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "brand_id"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "product_share",
+      "description": "Which of the brand's products AI answers name and recommend, and whose products win instead: per product mention rate, category share of voice, average rank and recommended rate (95% ranges, counts), category shares, rival products that won without the brand, by engine, market and intent.",
+      "inputSchema": {
+        "description": "WP13 `product_share` (F90).",
+        "properties": {
+          "brand_id": {
+            "type": "string"
+          },
+          "category": {
+            "default": null,
+            "description": "Product category (as in the catalogue, case-insensitive); default all.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "from": {
+            "default": null,
+            "description": "ISO date (inclusive); overrides `range`.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "range": {
+            "default": null,
+            "description": "`7d` | `30d` | `90d` | `365d` | `all`",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "to": {
+            "default": null,
+            "description": "ISO date (inclusive).",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "brand_id"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "product_results",
+      "description": "One catalogue product: mention and recommended rates by engine, the answers naming it (rank, recommended, rival products in the same answer), the pages those answers cite, rival products named alongside, and its prompts.",
+      "inputSchema": {
+        "description": "WP13 `product_results` (F90).",
+        "properties": {
+          "from": {
+            "default": null,
+            "description": "ISO date (inclusive); overrides `range`.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "product_id": {
+            "description": "Product id (from `product_share`).",
+            "type": "string"
+          },
+          "range": {
+            "default": null,
+            "description": "`7d` | `30d` | `90d` | `365d` | `all`",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "to": {
+            "default": null,
+            "description": "ISO date (inclusive).",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "product_id"
+        ],
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    }
+  ]
+}
